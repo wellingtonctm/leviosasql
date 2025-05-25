@@ -12,6 +12,9 @@ qt_add_executable(LeviosaSQL
     leviosa.h
     databaseloader.h databaseloader.cpp
     input.h input.cpp
+    sessionmanagerdialog.h sessionmanagerdialog.cpp
+    sessionmanagercore.h sessionmanagercore.cpp
+    sessionlistwidget.h sessionlistwidget.cpp
 
 )
 
