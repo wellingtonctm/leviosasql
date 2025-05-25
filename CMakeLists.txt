@@ -10,6 +10,9 @@ qt_add_executable(LeviosaSQL
     main.cpp
     leviosa.cpp
     leviosa.h
+    databaseloader.h databaseloader.cpp
+    input.h input.cpp
+
 )
 
 target_link_libraries(LeviosaSQL
