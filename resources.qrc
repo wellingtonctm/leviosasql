@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/sqlite_keywords.txt</file>
+        <file>resources/sqlite_functions.txt</file>
+        <file>resources/sqlite_commands.txt</file>
+    </qresource>
+</RCC>
