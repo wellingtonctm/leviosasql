@@ -15,11 +15,10 @@ Input::Input(QString label, QWidget *parent) : QWidget{parent}
     layout->addWidget(input_);
 }
 
-void Input::setValidator(QString pattern) {
-    QScopedPointer<QRegularExpressionValidator> validator(new QRegularExpressionValidator(QRegularExpression(pattern), this));
-    input_->setValidator(validator.take());
+void Input::setValidator(const QString &pattern) {
+    auto *validator = new QRegularExpressionValidator(QRegularExpression(pattern), this);
+    input_->setValidator(validator);
 }
-
 
 bool Input::validate() {
     QString str = text();

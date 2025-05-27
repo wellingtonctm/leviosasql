@@ -9,9 +9,10 @@
 class Input : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit Input(QString label, QWidget *parent = nullptr);
-    void setValidator(QString pattern);
+    void setValidator(const QString &pattern);
     bool validate();
     void setEchoMode(QLineEdit::EchoMode mode);
     QString text();
