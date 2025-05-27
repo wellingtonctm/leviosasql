@@ -1,5 +1,6 @@
 #include "multitabcodeeditor.h"
 #include "simplecodeeditor.h"
+#include "syntaxhighlighter.h"
 
 #include <QVBoxLayout>
 #include <QFile>
@@ -21,6 +22,12 @@ MultiTabCodeEditor::MultiTabCodeEditor(QWidget *parent) : QWidget{parent}
 
 void MultiTabCodeEditor::newTab() {
     SimpleCodeEditor *editor = new SimpleCodeEditor(this);
+
+    SyntaxHighlighter *syntaxHighlighter = new SyntaxHighlighter(editor->document());
+    syntaxHighlighter->setKeywords(keywordCompletions_);
+    syntaxHighlighter->setFunctions(functionCompletions_);
+    syntaxHighlighter->setCommands(commandCompletions_);
+
     tabWidget_->addTab(editor, "untitled");
 }
 
