@@ -5,6 +5,8 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
+set(CMAKE_AUTORCC ON)
+
 qt_add_executable(LeviosaSQL
     WIN32 MACOSX_BUNDLE
     main.cpp
@@ -17,13 +19,16 @@ qt_add_executable(LeviosaSQL
     sessionlistwidget.h sessionlistwidget.cpp
     multitabcodeeditor.h multitabcodeeditor.cpp
     simplecodeeditor.h simplecodeeditor.cpp
-
+    syntaxhighlighter.h syntaxhighlighter.cpp
+    resources.qrc
+    sshmanager.h sshmanager.cpp
 )
 
 target_link_libraries(LeviosaSQL
     PRIVATE
         Qt::Core
         Qt::Widgets
+        ${LIBSSH_LIBRARIES}
 )
 
 include(GNUInstallDirs)
