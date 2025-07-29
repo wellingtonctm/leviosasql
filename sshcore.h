@@ -1,15 +1,15 @@
-#ifndef SSHMANAGER_H
-#define SSHMANAGER_H
+#ifndef SSHCORE_H
+#define SSHCORE_H
 
 #include <libssh/libssh.h>
 #include <string>
 #include <functional>
 
-class SshManager
+class SshCore
 {
 public:
-    SshManager(const std::string& host, const std::string& user, const std::string& password);
-    ~SshManager();
+    SshCore(const std::string& host, const std::string& user, const std::string& password);
+    ~SshCore();
 
     void setCredentials(const std::string& host, const std::string& user, const std::string& password);
     void connect();
@@ -23,11 +23,11 @@ private:
     std::string user_;
     std::string password_;
     ssh_session session_ = nullptr;
-    bool isConnected_;
+    bool isConnected_ = false;
 
     void initializeSession();
     void authenticate();
     void checkConnection() const;
 };
 
-#endif // SSHMANAGER_H
+#endif // SSHCORE_H
