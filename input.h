@@ -12,10 +12,11 @@ class Input : public QWidget
 
 public:
     explicit Input(QString label, QWidget *parent = nullptr);
+
+    QString text();
     void setValidator(const QString &pattern);
     bool validate();
     void setEchoMode(QLineEdit::EchoMode mode);
-    QString text();
     void setText(const QString &text);
     void setPlaceholderText(const QString &text);
     void setEnabled(bool enabled);

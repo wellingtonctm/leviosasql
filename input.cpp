@@ -6,13 +6,14 @@
 Input::Input(QString label, QWidget *parent) : QWidget{parent}
 {
     QVBoxLayout *layout = new QVBoxLayout;
-    setLayout(layout);
 
     layout->setContentsMargins(0,0,0,0);
     label_ = new QLabel(label, this);
     layout->addWidget(label_);
     input_ = new QLineEdit(this);
     layout->addWidget(input_);
+
+    setLayout(layout);
 }
 
 void Input::setValidator(const QString &pattern) {
