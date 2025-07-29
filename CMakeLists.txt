@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.19)
 project(LeviosaSQL LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBSSH REQUIRED libssh)
 
 qt_standard_project_setup()
 
@@ -21,7 +23,8 @@ qt_add_executable(LeviosaSQL
     simplecodeeditor.h simplecodeeditor.cpp
     syntaxhighlighter.h syntaxhighlighter.cpp
     resources.qrc
-    sshmanager.h sshmanager.cpp
+    sshcore.h sshcore.cpp
+    sshworker.h sshworker.cpp
 )
 
 target_link_libraries(LeviosaSQL
