@@ -2,9 +2,11 @@
 #define SESSIONMANAGERDIALOG_H
 
 #include <QDialog>
+#include <QThread>
 
 #include "input.h"
 #include "sessionlistwidget.h"
+#include "sshworker.h"
 
 struct LoginData {
     QString host;
@@ -18,7 +20,12 @@ class SessionManagerDialog : public QDialog
 
 public:
     explicit SessionManagerDialog(QWidget *parent = nullptr);
-    std::optional<LoginData> getLoginData() const;
+    ~SessionManagerDialog();
+
+    LoginData getLoginData() const;
+
+public slots:
+    void onConnectionResultReceived(bool success, const QString &message);
 
 private slots:
     void onSessionSelected();
@@ -36,8 +43,10 @@ private:
     Input *hostnameInput_;
     Input *usernameInput_;
     Input *passwordInput_;
-    std::optional<LoginData> loginData_;
+    LoginData loginData_;
     bool userEditing_;
+    SshWorker *sshWorker_ = nullptr;
+    QThread *sshThread_ = nullptr;
 };
 
 #endif // SESSIONMANAGERDIALOG_H

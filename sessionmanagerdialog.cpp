@@ -1,4 +1,5 @@
 #include "sessionmanagerdialog.h"
+#include "leviosa.h"
 
 #include <QSplitter>
 #include <QLayout>
@@ -51,6 +52,26 @@ SessionManagerDialog::SessionManagerDialog(QWidget *parent) : QDialog{parent} {
 
     sessionListWidget_->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(sessionListWidget_, &QListWidget::customContextMenuRequested, this, &SessionManagerDialog::showContextMenu);
+
+    sshThread_ = new QThread(this);
+    sshWorker_ = new SshWorker();
+
+    sshWorker_->moveToThread(sshThread_);
+
+    connect(sshThread_, &QThread::finished, sshWorker_, &QObject::deleteLater);
+    connect(sshThread_, &QThread::finished, sshThread_, &QObject::deleteLater);
+
+    connect(sshWorker_, &SshWorker::connectionResultReceived, this, &SessionManagerDialog::onConnectionResultReceived);
+
+    sshThread_->start();
+}
+
+SessionManagerDialog::~SessionManagerDialog()
+{
+    if (sshThread_->isRunning()) {
+        sshThread_->quit();
+        sshThread_->wait();
+    }
 }
 
 void SessionManagerDialog::onLoginPressed()
@@ -65,10 +86,32 @@ void SessionManagerDialog::onLoginPressed()
         usernameInput_->text(),
         passwordInput_->text()
     };
-    accept();
+
+    setDisabled(true);
+    sshWorker_->setCredentials(loginData_.host, loginData_.user, loginData_.password);
+    QMetaObject::invokeMethod(sshWorker_, "connect", Qt::QueuedConnection);
 }
 
-std::optional<LoginData> SessionManagerDialog::getLoginData() const
+void SessionManagerDialog::onConnectionResultReceived(bool success, const QString &message) {
+    setDisabled(false);
+
+    if (success) {
+        Leviosa *window = new Leviosa(nullptr, sshWorker_);
+        window->setAttribute(Qt::WA_DeleteOnClose);
+
+        connect(window, &Leviosa::initializationFailed, this, [this]() {
+            if (isHidden()) show();
+        });
+
+        window->show();
+        hide();
+    }
+    else {
+        QMessageBox::warning(this, "Connection Failed", message);
+    }
+}
+
+LoginData SessionManagerDialog::getLoginData() const
 {
     return loginData_;
 }
